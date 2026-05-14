@@ -8,7 +8,6 @@ import {
   Users,
   FileText,
   Filter,
-  Settings,
   Bell,
   Search,
   Menu,
@@ -37,7 +36,6 @@ const navItems = [
   { label: "Ads", href: "/ads", icon: Megaphone },
   { label: "User Activity", href: "/user-activity", icon: Activity },
   { label: "Funnels", href: "/funnels", icon: Filter },
-  { label: "System", href: "/system", icon: Settings },
 ];
 
 function pageTitleFromPath(pathname: string): string {
