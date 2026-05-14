@@ -66,13 +66,38 @@ function EmptyChart({ icon: Icon, title, subtitle }: {
   );
 }
 
+function isAdStats(value: unknown): value is AdStats {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as Partial<AdStats>;
+
+  return (
+    typeof candidate.impressions === "number" &&
+    typeof candidate.clicks === "number" &&
+    typeof candidate.ctr === "number" &&
+    typeof candidate.uniqueVisitors === "number" &&
+    Array.isArray(candidate.dailyPerformance) &&
+    Array.isArray(candidate.regionBreakdown) &&
+    Array.isArray(candidate.deviceBreakdown) &&
+    Array.isArray(candidate.topReferrers) &&
+    Array.isArray(candidate.recentEvents)
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    AD DETAIL COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
-export function AdDetailClient({ ad }: { ad: NormalizedAd }) {
+export function AdDetailClient({
+  ad,
+  tracking,
+}: {
+  ad: NormalizedAd;
+  tracking?: unknown;
+}) {
   /* ── Fetch real tracking stats ──────────────────────────────── */
-  const [stats, setStats] = useState<AdStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const initialStats = isAdStats(tracking) ? tracking : null;
+  const [stats, setStats] = useState<AdStats | null>(initialStats);
+  const [loading, setLoading] = useState(!initialStats);
 
   const fetchStats = useCallback(async () => {
     try {
